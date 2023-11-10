@@ -1,0 +1,47 @@
+<project
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ch.rasc</groupId>
+	<artifactId>openai4j-examples</artifactId>
+	<version>0.0.1</version>
+	<name>openai4j-examples</name>
+	<developers>
+		<developer>
+			<name>Ralph Schaer</name>
+			<email>ralphschaer@gmail.com</email>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<repositories>
+		<repository>
+		    <id>sonatype-snapshots</id>
+		    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+		    <groupId>ch.rasc</groupId>
+		    <artifactId>openai4j</artifactId>
+		    <version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<release>21</release>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
