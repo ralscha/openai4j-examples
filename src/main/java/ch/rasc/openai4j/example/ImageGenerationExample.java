@@ -30,10 +30,12 @@ public class ImageGenerationExample {
 
 		try (var httpClient = HttpClient.newHttpClient()) {
 			var request = HttpRequest.newBuilder().uri(URI.create(url)).build();
-			var resp = httpClient.send(request, HttpResponse.BodyHandlers.ofInputStream());
+			var resp = httpClient.send(request,
+					HttpResponse.BodyHandlers.ofInputStream());
 			var fileName = "image1.png";
 			try (var body = resp.body()) {
-				Files.copy(body, Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(body, Paths.get(fileName),
+						StandardCopyOption.REPLACE_EXISTING);
 			}
 		}
 
