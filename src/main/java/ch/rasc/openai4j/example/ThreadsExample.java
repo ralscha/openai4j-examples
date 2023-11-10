@@ -11,30 +11,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
 
 public class ThreadsExample {
-    public static void main(String[] args) throws JsonProcessingException {
-        String apiKey = Util.getApiKey();
-        var client = OpenAIClient.create(c -> c.apiKey(apiKey));
+	public static void main(String[] args) throws JsonProcessingException {
+		String apiKey = Util.getApiKey();
+		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
-        ThreadCreateRequest request =
-                ThreadCreateRequest.builder()
-                        .addMessages(ThreadMessage.builder().content("hello").build())
-                        .putMetadata("name", "ralph")
-                        .build();
-        ObjectMapper om = new ObjectMapper();
-        System.out.println(om.writeValueAsString(request));
-        Thread response = client.threads.create(request);
-        System.out.println(response);
+		ThreadCreateRequest request = ThreadCreateRequest.builder()
+				.addMessages(ThreadMessage.builder().content("hello").build())
+				.putMetadata("name", "ralph").build();
+		ObjectMapper om = new ObjectMapper();
+		System.out.println(om.writeValueAsString(request));
+		Thread response = client.threads.create(request);
+		System.out.println(response);
 
-        var r = client.threads.retrieve(response.id());
-        System.out.println(r);
+		var r = client.threads.retrieve(response.id());
+		System.out.println(r);
 
-        var ru = client.threads.update(response.id(), ThreadUpdateRequest.of(Map.of("name", "john")));
-        System.out.println(ru);
+		var ru = client.threads.update(response.id(),
+				ThreadUpdateRequest.of(Map.of("name", "john")));
+		System.out.println(ru);
 
-        r = client.threads.retrieve(response.id());
-        System.out.println(r);
+		r = client.threads.retrieve(response.id());
+		System.out.println(r);
 
-        var df = client.threads.delete(response.id());
-        System.out.println(df);
-    }
+		var df = client.threads.delete(response.id());
+		System.out.println(df);
+	}
 }
