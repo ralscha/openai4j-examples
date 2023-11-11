@@ -1,9 +1,10 @@
 package ch.rasc.openai4j.example;
 
+import java.util.concurrent.TimeUnit;
+
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.CodeTool;
-import ch.rasc.openai4j.common.SortOrder;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
 public class MathAssistantExample {
@@ -28,7 +29,7 @@ public class MathAssistantExample {
 		}
 		System.out.println(assistant);
 
-		var thread = client.threads.create(c -> c);
+		var thread = client.threads.create();
 		System.out.println(thread);
 
 		var message = client.threadsMessages.create(thread.id(),
@@ -41,21 +42,12 @@ public class MathAssistantExample {
 				c -> c.assistantId(af.id()).instructions(
 						"Please address the user as Jane Doe. The user has a premium account."));
 
-		System.out.println(run);
-		while (!run.status().isTerminal()) {
-			try {
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			run = client.threadsRuns.retrieve(thread.id(), run.id());
-			System.out.println(run);
-		}
+		client.threadsRuns.waitForProcessing(run, 30, TimeUnit.SECONDS, 2,
+				TimeUnit.MINUTES);
 
 		System.out.println("Messages from the assistant");
 		var messages = client.threadsMessages.list(thread.id(),
-				p -> p.order(SortOrder.ASC).after(message.id()));
+				p -> p.before(message.id()));
 		for (var msg : messages.data()) {
 			var content = msg.content()[0];
 			if (content instanceof MessageContentText text) {

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.rasc</groupId>
 	<artifactId>openai4j-examples</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<name>openai4j-examples</name>
 	<developers>
 		<developer>
@@ -40,7 +40,7 @@
 		<dependency>
 		    <groupId>ch.rasc</groupId>
 		    <artifactId>openai4j</artifactId>
-		    <version>0.0.1-SNAPSHOT</version>
+		    <version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.knuddels</groupId>
