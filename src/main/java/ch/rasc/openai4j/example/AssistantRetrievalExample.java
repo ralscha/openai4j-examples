@@ -1,7 +1,10 @@
 package ch.rasc.openai4j.example;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
@@ -9,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.RetrievalTool;
-import ch.rasc.openai4j.common.SortOrder;
-import ch.rasc.openai4j.files.FileCreateRequest;
 import ch.rasc.openai4j.files.FileObject;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
@@ -19,24 +20,21 @@ public class AssistantRetrievalExample {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
-		// Upload file for Assistant (Winnie-the-Pooh)
-		// https://www.gutenberg.org/cache/epub/67098/pg67098.txt
 		FileObject file;
 
 		try (var httpClient = HttpClient.newHttpClient()) {
-			var request = java.net.http.HttpRequest.newBuilder()
-					.uri(java.net.URI.create(
+			var request = HttpRequest.newBuilder()
+					.uri(URI.create(
 							"https://www.gutenberg.org/cache/epub/67098/pg67098.txt"))
 					.build();
-			var response = httpClient.send(request,
-					java.net.http.HttpResponse.BodyHandlers.ofString());
+			var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 			var body = response.body();
 
 			Path tmpFile = Files.createTempFile("pooh", ".txt");
 			Files.writeString(tmpFile, body);
 
-			// upload file
-			file = client.files.create(FileCreateRequest.forAssistants(tmpFile));
+			// upload file for Assistant
+			file = client.files.createForAssistants(tmpFile);
 			client.files.waitForProcessing(file.id());
 
 			Files.delete(tmpFile);
@@ -46,7 +44,7 @@ public class AssistantRetrievalExample {
 		Assistant assistant = null;
 
 		for (var a : assistants.data()) {
-			if (a.name().equals("DocumentAnalyzer")) {
+			if ("DocumentAnalyzer".equals(a.name())) {
 				assistant = a;
 				break;
 			}
@@ -59,7 +57,7 @@ public class AssistantRetrievalExample {
 					.model("gpt-4-1106-preview"));
 		}
 
-		var thread = client.threads.create(c -> c);
+		var thread = client.threads.create();
 
 		var message = client.threadsMessages.create(thread.id(),
 				c -> c.role("user").content(
@@ -71,7 +69,7 @@ public class AssistantRetrievalExample {
 				TimeUnit.MINUTES);
 
 		var messages = client.threadsMessages.list(thread.id(),
-				p -> p.order(SortOrder.ASC).after(message.id()));
+				p -> p.before(message.id()));
 		for (var msg : messages.data()) {
 			var content = msg.content()[0];
 			if (content instanceof MessageContentText text) {

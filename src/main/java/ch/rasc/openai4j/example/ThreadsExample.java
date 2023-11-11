@@ -1,14 +1,15 @@
 package ch.rasc.openai4j.example;
 
+import java.util.Map;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.threads.Thread;
 import ch.rasc.openai4j.threads.ThreadCreateRequest;
 import ch.rasc.openai4j.threads.ThreadMessage;
 import ch.rasc.openai4j.threads.ThreadUpdateRequest;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.Map;
 
 public class ThreadsExample {
 	public static void main(String[] args) throws JsonProcessingException {

@@ -1,9 +1,5 @@
 package ch.rasc.openai4j.example;
 
-import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.images.ImageGenerationRequest;
-import ch.rasc.openai4j.images.ImageGenerationRequest.Size;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -13,6 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Base64;
+
+import ch.rasc.openai4j.OpenAIClient;
+import ch.rasc.openai4j.images.ImageGenerationRequest;
+import ch.rasc.openai4j.images.ImageGenerationRequest.Size;
 
 public class ImageGenerationExample {
 

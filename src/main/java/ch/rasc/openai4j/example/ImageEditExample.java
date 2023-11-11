@@ -1,14 +1,14 @@
 package ch.rasc.openai4j.example;
 
-import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.images.Image;
-import ch.rasc.openai4j.images.ImageEditRequest;
-import ch.rasc.openai4j.images.ImageEditRequest.Size;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
+
+import ch.rasc.openai4j.OpenAIClient;
+import ch.rasc.openai4j.images.Image;
+import ch.rasc.openai4j.images.ImageEditRequest;
+import ch.rasc.openai4j.images.ImageEditRequest.Size;
 
 public class ImageEditExample {
 

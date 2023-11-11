@@ -1,12 +1,12 @@
 package ch.rasc.openai4j.example;
 
-import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.audio.AudioSpeechRequest;
-import feign.Response;
-
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import ch.rasc.openai4j.OpenAIClient;
+import ch.rasc.openai4j.audio.AudioSpeechRequest;
+import feign.Response;
 
 public class AudioExample {
 

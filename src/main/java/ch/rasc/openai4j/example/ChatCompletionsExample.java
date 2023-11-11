@@ -26,7 +26,7 @@ public class ChatCompletionsExample {
 		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4);
 		List<Integer> encoded = enc.encode("What is the capital of Spain?");
 		System.out.println("Token length: " + encoded.size());
-		
+
 		/*
 		 * var azureClient = OpenAIClient
 		 * .create(Configuration.builder().apiVersion("2023-07-01-preview")

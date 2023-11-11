@@ -15,7 +15,7 @@ public class MathAssistantExample {
 		Assistant assistant = null;
 
 		for (var a : assistants.data()) {
-			if (a.name().equals("Math Tutor")) {
+			if ("Math Tutor".equals(a.name())) {
 				assistant = a;
 				break;
 			}

@@ -1,10 +1,10 @@
 package ch.rasc.openai4j.example;
 
+import java.util.Arrays;
+
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.embeddings.EmbeddingCreateRequest;
 import ch.rasc.openai4j.embeddings.EmbeddingCreateRequest.EncodingFormat;
-
-import java.util.Arrays;
 
 public class EmbeddingsExample {
 	public static void main(String[] args) {
