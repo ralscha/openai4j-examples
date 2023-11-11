@@ -1,5 +1,12 @@
 package ch.rasc.openai4j.example;
 
+import java.util.List;
+
+import com.knuddels.jtokkit.Encodings;
+import com.knuddels.jtokkit.api.Encoding;
+import com.knuddels.jtokkit.api.EncodingRegistry;
+import com.knuddels.jtokkit.api.ModelType;
+
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.chatcompletions.SystemMessage;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
@@ -15,6 +22,11 @@ public class ChatCompletionsExample {
 						.model("gpt-4-1106-preview"));
 		System.out.println(response.choices()[0].message().content());
 
+		EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
+		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4);
+		List<Integer> encoded = enc.encode("What is the capital of Spain?");
+		System.out.println("Token length: " + encoded.size());
+		
 		/*
 		 * var azureClient = OpenAIClient
 		 * .create(Configuration.builder().apiVersion("2023-07-01-preview")
