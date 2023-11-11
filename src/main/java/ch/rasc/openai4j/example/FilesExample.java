@@ -1,6 +1,7 @@
 package ch.rasc.openai4j.example;
 
 import ch.rasc.openai4j.OpenAIClient;
+import ch.rasc.openai4j.files.FileCreateRequest;
 import ch.rasc.openai4j.files.Purpose;
 
 import java.io.FileOutputStream;
@@ -26,7 +27,7 @@ public class FilesExample {
 		System.out.println(filesWithAPurpose);
 
 		var p = Paths.get("./image1.png");
-		var response = client.files.create(r -> r.file(p).purpose(Purpose.ASSISTANTS));
+		var response = client.files.create(FileCreateRequest.forAssistants(p));
 		System.out.println(response);
 
 		System.out.println();

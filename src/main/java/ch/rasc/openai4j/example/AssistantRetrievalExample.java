@@ -9,8 +9,8 @@ import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.RetrievalTool;
 import ch.rasc.openai4j.common.SortOrder;
+import ch.rasc.openai4j.files.FileCreateRequest;
 import ch.rasc.openai4j.files.FileObject;
-import ch.rasc.openai4j.files.Purpose;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
 public class AssistantRetrievalExample {
@@ -30,16 +30,15 @@ public class AssistantRetrievalExample {
 			var response = httpClient.send(request,
 					java.net.http.HttpResponse.BodyHandlers.ofString());
 			var body = response.body();
-			// save to tmp file
+
 			Path tmpFile = Files.createTempFile("pooh", ".txt");
 			Files.writeString(tmpFile, body);
 
 			// upload file
-			file = client.files.create(u -> u.file(tmpFile).purpose(Purpose.ASSISTANTS));
+			file = client.files.create(FileCreateRequest.forAssistants(tmpFile));
 			client.files.waitForProcessing(file.id());
 
 			Files.delete(tmpFile);
-
 		}
 
 		var assistants = client.assistants.list();

@@ -1,12 +1,12 @@
 package ch.rasc.openai4j.example;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.RetrievalTool;
-import ch.rasc.openai4j.files.Purpose;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import ch.rasc.openai4j.files.FileCreateRequest;
 
 public class AssistantsExample {
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class AssistantsExample {
 		System.out.println(c);
 
 		Path p = Paths.get("LICENSE");
-		var f = client.files.create(r -> r.file(p).purpose(Purpose.ASSISTANTS));
+		var f = client.files.create(FileCreateRequest.forAssistants(p));
 		System.out.println(f);
 		var r = client.assistantsFiles.create(c.id(), ra -> ra.fileId(f.id()));
 		System.out.println(r);

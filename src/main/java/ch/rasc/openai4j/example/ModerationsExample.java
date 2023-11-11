@@ -9,6 +9,7 @@ public class ModerationsExample {
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		var input = "Hallo schöne Welt wie geht es dir?";
+
 		var response = client.moderations.create(r -> r.input(input));
 		System.out.println(response);
 	}

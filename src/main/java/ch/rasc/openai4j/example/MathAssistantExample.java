@@ -4,6 +4,7 @@ import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.CodeTool;
 import ch.rasc.openai4j.common.SortOrder;
+import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
 public class MathAssistantExample {
 	public static void main(String[] args) {
@@ -56,7 +57,10 @@ public class MathAssistantExample {
 		var messages = client.threadsMessages.list(thread.id(),
 				p -> p.order(SortOrder.ASC).after(message.id()));
 		for (var msg : messages.data()) {
-			System.out.println(msg);
+			var content = msg.content()[0];
+			if (content instanceof MessageContentText text) { 
+				System.out.println(text.text().value());
+			}
 		}
 
 		System.out.println("list run steps");

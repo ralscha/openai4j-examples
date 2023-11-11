@@ -2,7 +2,6 @@ package ch.rasc.openai4j.example;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -26,7 +25,7 @@ import ch.rasc.openai4j.chatcompletions.ChatCompletionsResponse.Choice.FinishRea
 import ch.rasc.openai4j.chatcompletions.SystemMessage;
 import ch.rasc.openai4j.chatcompletions.ToolMessage;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
-import ch.rasc.openai4j.common.Function;
+import ch.rasc.openai4j.common.FunctionParameters;
 
 public class ChatCompletionsFunctionExample {
 
@@ -45,7 +44,7 @@ public class ChatCompletionsFunctionExample {
 
 		@Override
 		public String toString() {
-			return "Weather [location=" + location + ", unit=" + unit + "]";
+			return "Weather [location=" + this.location + ", unit=" + this.unit + "]";
 		}
 
 	}
@@ -72,7 +71,7 @@ public class ChatCompletionsFunctionExample {
 				.of("What is the current temperature in Sidney in Fahrenheit?"));
 
 		var response = client.chatCompletions.create(r -> r.addAllMessages(thread)
-				.addTool(ChatCompletionTool.of(Function.of("get_temperature",
+				.addTool(ChatCompletionTool.of(FunctionParameters.of("get_temperature",
 						"Get the current temperature of a location", jsonSchema)))
 				.model("gpt-4-1106-preview"));
 
@@ -82,7 +81,7 @@ public class ChatCompletionsFunctionExample {
 			if (message.toolCalls() != null) {
 				thread.add(AssistantMessage.of(choice.message()));
 				for (var toolCall : message.toolCalls()) {
-					if (toolCall.function().name().equals("get_temperature")) {
+					if ("get_temperature".equals(toolCall.function().name())) {
 						Weather weather = om.readValue(toolCall.function().arguments(),
 								Weather.class);
 						System.out.println(

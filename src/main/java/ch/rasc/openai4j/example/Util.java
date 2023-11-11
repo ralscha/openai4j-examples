@@ -9,7 +9,7 @@ public class Util {
 	public static String getApiKey() {
 		String token = System.getenv("OPENAI_API_KEY");
 		if (token == null || token.isBlank()) {
-			// read from .env in current directory
+			// try to read from .env in current directory
 			Properties props = new Properties();
 			try (InputStream is = Files.newInputStream(Paths.get(".env"))) {
 				props.load(is);
