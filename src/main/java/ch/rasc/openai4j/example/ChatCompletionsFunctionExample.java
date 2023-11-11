@@ -1,110 +1,77 @@
 package ch.rasc.openai4j.example;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.victools.jsonschema.generator.OptionPreset;
-import com.github.victools.jsonschema.generator.SchemaGenerator;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
-import com.github.victools.jsonschema.generator.SchemaVersion;
-import com.github.victools.jsonschema.module.jackson.JacksonModule;
-import com.github.victools.jsonschema.module.jackson.JacksonOption;
 
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.chatcompletions.AssistantMessage;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionMessage;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionTool;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionsResponse.Choice.FinishReason;
-import ch.rasc.openai4j.chatcompletions.SystemMessage;
-import ch.rasc.openai4j.chatcompletions.ToolMessage;
+import ch.rasc.openai4j.chatcompletions.JavaFunction;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
-import ch.rasc.openai4j.common.FunctionParameters;
 
 public class ChatCompletionsFunctionExample {
+	private final static ObjectMapper om = new ObjectMapper();
 
-	enum WeatherUnit {
-		CELSIUS, FAHRENHEIT;
+	static class Location {
+		@JsonProperty(required = true)
+		@JsonPropertyDescription("Latitude of the location. Geographical WGS84 coordinates")
+		public float latitude;
+
+		@JsonProperty(required = true)
+		@JsonPropertyDescription("Longitude of the location. Geographical WGS84 coordinates")
+		public float longitude;
 	}
 
-	static class Weather {
-		@JsonProperty(required = true)
-		@JsonPropertyDescription("City and state, for example: Bern, Switzerland")
-		public String location;
+	static class TemperatureFetcher {
 
-		@JsonPropertyDescription("The temperature unit, can be 'celsius' or 'fahrenheit'")
-		@JsonProperty(required = true)
-		public WeatherUnit unit;
+		public Float fetchTemperature(Location location) {
+			System.out.println("calling fetchTemperature");
+			try (var client = HttpClient.newHttpClient()) {
+				var request = HttpRequest.newBuilder()
+						.uri(URI.create("https://api.open-meteo.com/v1/metno?latitude="
+								+ location.latitude + "&longitude=" + location.longitude
+								+ "&current=temperature_2m"))
+						.build();
+				var response = client.send(request,
+						java.net.http.HttpResponse.BodyHandlers.ofString());
 
-		@Override
-		public String toString() {
-			return "Weather [location=" + this.location + ", unit=" + this.unit + "]";
+				var body = response.body();
+				System.out.println(body);
+				var jsonNode = om.readTree(body);
+				var current = jsonNode.get("current");
+				var temperature = current.get("temperature_2m");
+				return temperature.floatValue();
+			}
+			catch (IOException | InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+
 		}
 
 	}
 
-	public static void main(String[] args)
-			throws JsonMappingException, JsonProcessingException {
+	public static void main(String[] args) throws JsonProcessingException {
 
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
-		ObjectMapper om = new ObjectMapper();
+		TemperatureFetcher fetcher = new TemperatureFetcher();
+		JavaFunction<Location, Float> getWeather = JavaFunction.of("get_temperature",
+				"Get the current temperature of a location", Location.class,
+				fetcher::fetchTemperature);
 
-		JacksonModule module = new JacksonModule(
-				JacksonOption.RESPECT_JSONPROPERTY_REQUIRED);
-		SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(
-				SchemaVersion.DRAFT_2020_12, OptionPreset.PLAIN_JSON).with(module);
-		SchemaGeneratorConfig config = configBuilder.build();
-		SchemaGenerator generator = new SchemaGenerator(config);
-		JsonNode jsonSchema = generator.generateSchema(Weather.class);
-
-		List<ChatCompletionMessage> thread = new ArrayList<>();
-		thread.add(SystemMessage.of("You are a helpful assistant"));
-		thread.add(UserMessage
-				.of("What is the current temperature in Sidney in Fahrenheit?"));
-
-		var response = client.chatCompletions.create(r -> r.addAllMessages(thread)
-				.addTool(ChatCompletionTool.of(FunctionParameters.of("get_temperature",
-						"Get the current temperature of a location", jsonSchema)))
-				.model("gpt-4-1106-preview"));
+		var response = client.chatCompletions.create(r -> r.addMessage(UserMessage.of(
+				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
+				.model("gpt-4-1106-preview"), List.of(getWeather), om, 1);
 
 		var choice = response.choices()[0];
-		if (choice.finishReason() == FinishReason.TOOL_CALLS) {
-			var message = choice.message();
-			if (message.toolCalls() != null) {
-				thread.add(AssistantMessage.of(choice.message()));
-				for (var toolCall : message.toolCalls()) {
-					if ("get_temperature".equals(toolCall.function().name())) {
-						Weather weather = om.readValue(toolCall.function().arguments(),
-								Weather.class);
-						System.out.println(
-								"calling get_temperature with parameters:" + weather);
-						thread.add(ToolMessage.of(toolCall.id(), "72"));
-					}
-				}
-			}
-
-			System.out.println(om.writeValueAsString(thread));
-
-			// send it a second time
-			response = client.chatCompletions
-					.create(r -> r.addAllMessages(thread).model("gpt-4-1106-preview"));
-
-			choice = response.choices()[0];
-			System.out.println(choice.message().content());
-
-		}
-		else {
-			System.out.println("Not a function call");
-			System.out.println(choice);
-		}
+		System.out.println(choice.message().content());
 
 	}
 }
