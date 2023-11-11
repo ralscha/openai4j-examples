@@ -58,7 +58,7 @@ public class MathAssistantExample {
 				p -> p.order(SortOrder.ASC).after(message.id()));
 		for (var msg : messages.data()) {
 			var content = msg.content()[0];
-			if (content instanceof MessageContentText text) { 
+			if (content instanceof MessageContentText text) {
 				System.out.println(text.text().value());
 			}
 		}

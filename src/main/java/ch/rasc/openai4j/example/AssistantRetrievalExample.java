@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.http.HttpClient;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
@@ -66,18 +67,8 @@ public class AssistantRetrievalExample {
 
 		final Assistant af = assistant;
 		var run = client.threadsRuns.create(thread.id(), c -> c.assistantId(af.id()));
-
-		System.out.println(run.status());
-		while (!run.status().isTerminal()) {
-			try {
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			run = client.threadsRuns.retrieve(thread.id(), run.id());
-			System.out.println(run.status());
-		}
+		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 2,
+				TimeUnit.MINUTES);
 
 		var messages = client.threadsMessages.list(thread.id(),
 				p -> p.order(SortOrder.ASC).after(message.id()));

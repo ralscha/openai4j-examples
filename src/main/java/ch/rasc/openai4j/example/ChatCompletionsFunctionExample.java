@@ -96,7 +96,9 @@ public class ChatCompletionsFunctionExample {
 			// send it a second time
 			response = client.chatCompletions
 					.create(r -> r.addAllMessages(thread).model("gpt-4-1106-preview"));
-			System.out.println(response);
+
+			choice = response.choices()[0];
+			System.out.println(choice.message().content());
 
 		}
 		else {
