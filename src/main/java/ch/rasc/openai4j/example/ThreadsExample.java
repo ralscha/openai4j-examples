@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.threads.Thread;
 import ch.rasc.openai4j.threads.ThreadCreateRequest;
-import ch.rasc.openai4j.threads.ThreadMessage;
+import ch.rasc.openai4j.threads.ThreadMessageRequest;
 import ch.rasc.openai4j.threads.ThreadUpdateRequest;
 
 public class ThreadsExample {
@@ -17,7 +17,7 @@ public class ThreadsExample {
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		ThreadCreateRequest request = ThreadCreateRequest.builder()
-				.addMessages(ThreadMessage.builder().content("hello").build())
+				.addMessages(ThreadMessageRequest.builder().content("hello").build())
 				.putMetadata("name", "ralph").build();
 		ObjectMapper om = new ObjectMapper();
 		System.out.println(om.writeValueAsString(request));
