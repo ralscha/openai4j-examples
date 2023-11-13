@@ -96,7 +96,7 @@ public class AssistantsToolQuizExample {
 	private static void prettyPrint(List<ThreadMessage> messages) {
 		System.out.println("# Messages");
 		for (var msg : messages) {
-			var content = msg.content()[0];
+			var content = msg.content().get(0);
 			if (content instanceof MessageContentText text) {
 				System.out.println(msg.role() + ": " + text.text().value());
 			}

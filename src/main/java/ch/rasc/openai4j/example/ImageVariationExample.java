@@ -7,8 +7,10 @@ import java.util.Base64;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.images.Image;
+import ch.rasc.openai4j.images.ImageModel;
+import ch.rasc.openai4j.images.ImageResponseFormat;
+import ch.rasc.openai4j.images.ImageSize;
 import ch.rasc.openai4j.images.ImageVariationRequest;
-import ch.rasc.openai4j.images.ImageVariationRequest.Size;
 
 public class ImageVariationExample {
 
@@ -16,11 +18,10 @@ public class ImageVariationExample {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
-		var response = client.images.createVariation(
-				ImageVariationRequest.builder().image(Paths.get("./image2.png"))
-						.model(ImageVariationRequest.Model.DALL_E_2).n(4)
-						.responseFormat(ImageVariationRequest.ResponseFormat.B64_JSON)
-						.size(Size.S_1024).build());
+		var response = client.images.createVariation(ImageVariationRequest.builder()
+				.image(Paths.get("./image2.png")).model(ImageModel.DALL_E_2).n(4)
+				.responseFormat(ImageResponseFormat.B64_JSON).size(ImageSize.S_1024)
+				.build());
 		int i = 3;
 		for (Image imageObject : response.data()) {
 			String b64Json = imageObject.b64Json();

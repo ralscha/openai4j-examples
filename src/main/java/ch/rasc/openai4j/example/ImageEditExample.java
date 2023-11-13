@@ -7,8 +7,8 @@ import java.util.Base64;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.images.Image;
-import ch.rasc.openai4j.images.ImageEditRequest;
-import ch.rasc.openai4j.images.ImageEditRequest.Size;
+import ch.rasc.openai4j.images.ImageResponseFormat;
+import ch.rasc.openai4j.images.ImageSize;
 
 public class ImageEditExample {
 
@@ -18,8 +18,7 @@ public class ImageEditExample {
 
 		var response = client.images.edit(r -> r.image(Paths.get("./input.png"))
 				.prompt("Cats in Paris").mask(Paths.get("./mask.png")).n(3)
-				.responseFormat(ImageEditRequest.ResponseFormat.B64_JSON)
-				.size(Size.S_1024));
+				.responseFormat(ImageResponseFormat.B64_JSON).size(ImageSize.S_1024));
 		int i = 7;
 		for (Image imageObject : response.data()) {
 			String b64Json = imageObject.b64Json();

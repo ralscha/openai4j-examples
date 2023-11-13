@@ -5,7 +5,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.audio.AudioSpeechRequest;
+import ch.rasc.openai4j.audio.AudioSpeechRequest.SpeechModel;
+import ch.rasc.openai4j.audio.AudioSpeechRequest.Voice;
 import feign.Response;
 
 public class AudioExample {
@@ -16,9 +17,8 @@ public class AudioExample {
 
 		var input = "Wie geht es dir?";
 
-		try (Response response = client.audio
-				.create(r -> r.input(input).model(AudioSpeechRequest.Model.TTS_1_HD)
-						.voice(AudioSpeechRequest.Voice.ALLOY));
+		try (Response response = client.audio.create(
+				r -> r.input(input).model(SpeechModel.TTS_1_HD).voice(Voice.ALLOY));
 				FileOutputStream fos = new FileOutputStream("hello.mp3");
 				var body = response.body();
 				var is = body.asInputStream()) {

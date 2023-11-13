@@ -12,7 +12,11 @@ import java.util.Base64;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.images.ImageGenerationRequest;
-import ch.rasc.openai4j.images.ImageGenerationRequest.Size;
+import ch.rasc.openai4j.images.ImageGenerationRequest.Quality;
+import ch.rasc.openai4j.images.ImageGenerationRequest.Style;
+import ch.rasc.openai4j.images.ImageModel;
+import ch.rasc.openai4j.images.ImageResponseFormat;
+import ch.rasc.openai4j.images.ImageSize;
 
 public class ImageGenerationExample {
 
@@ -23,9 +27,8 @@ public class ImageGenerationExample {
 		String input = "A bunch of people are standing in a field. They are wearing colorful clothes and holding"
 				+ " umbrellas.";
 		var response = client.images
-				.generate(r -> r.model(ImageGenerationRequest.Model.DALL_E_3)
-						.quality(ImageGenerationRequest.Quality.HD).prompt(input)
-						.style(ImageGenerationRequest.Style.NATURAL).size(Size.S_1024));
+				.generate(r -> r.model(ImageModel.DALL_E_3).quality(Quality.HD)
+						.prompt(input).style(Style.NATURAL).size(ImageSize.S_1024));
 		var url = response.data().get(0).url();
 
 		try (var httpClient = HttpClient.newHttpClient()) {
@@ -40,12 +43,10 @@ public class ImageGenerationExample {
 		}
 
 		String input2 = "A couple of cats are sitting on a couch.";
-		response = client.images
-				.generate(r -> r.model(ImageGenerationRequest.Model.DALL_E_3)
-						.quality(ImageGenerationRequest.Quality.HD).prompt(input2)
-						.style(ImageGenerationRequest.Style.NATURAL)
-						.responseFormat(ImageGenerationRequest.ResponseFormat.B64_JSON)
-						.size(Size.S_1024));
+		response = client.images.generate(r -> r.model(ImageModel.DALL_E_3)
+				.quality(ImageGenerationRequest.Quality.HD).prompt(input2)
+				.style(ImageGenerationRequest.Style.NATURAL)
+				.responseFormat(ImageResponseFormat.B64_JSON).size(ImageSize.S_1024));
 		String b64Json = response.data().get(0).b64Json();
 		byte[] decodedBytes = Base64.getDecoder().decode(b64Json);
 		Files.write(Paths.get("image2.png"), decodedBytes);

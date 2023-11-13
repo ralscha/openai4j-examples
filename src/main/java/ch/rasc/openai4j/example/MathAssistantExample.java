@@ -48,7 +48,7 @@ public class MathAssistantExample {
 		var messages = client.threadsMessages.list(thread.id(),
 				p -> p.before(message.id()));
 		for (var msg : messages.data()) {
-			var content = msg.content()[0];
+			var content = msg.content().get(0);
 			if (content instanceof MessageContentText text) {
 				System.out.println(text.text().value());
 			}

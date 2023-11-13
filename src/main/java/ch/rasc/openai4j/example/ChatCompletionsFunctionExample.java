@@ -70,7 +70,7 @@ public class ChatCompletionsFunctionExample {
 				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
 				.model("gpt-4-1106-preview"), List.of(getWeather), om, 1);
 
-		var choice = response.choices()[0];
+		var choice = response.choices().get(0);
 		System.out.println(choice.message().content());
 
 	}

@@ -20,7 +20,7 @@ public class ChatCompletionsExample {
 				.create(r -> r.addMessage(SystemMessage.of("You are a helpful assistant"))
 						.addMessage(UserMessage.of("What is the capital of Spain?"))
 						.model("gpt-4-1106-preview"));
-		System.out.println(response.choices()[0].message().content());
+		System.out.println(response.choices().get(0).message().content());
 
 		EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
 		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4);
