@@ -66,7 +66,7 @@ public class ChatCompletionsFunctionExample {
 				"Get the current temperature of a location", Location.class,
 				fetcher::fetchTemperature);
 
-		var response = client.chatCompletions.create(r -> r.addMessage(UserMessage.of(
+		var response = client.chatCompletions.create(r -> r.addMessages(UserMessage.of(
 				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
 				.model("gpt-4-1106-preview"), List.of(getWeather), om, 1);
 

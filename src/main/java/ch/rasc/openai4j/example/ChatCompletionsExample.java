@@ -17,8 +17,7 @@ public class ChatCompletionsExample {
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		var response = client.chatCompletions
-				.create(r -> r.addMessage(SystemMessage.of("You are a helpful assistant"))
-						.addMessage(UserMessage.of("What is the capital of Spain?"))
+				.create(r -> r.addMessages(SystemMessage.of("You are a helpful assistant"), UserMessage.of("What is the capital of Spain?"))
 						.model("gpt-4-1106-preview"));
 		System.out.println(response.choices().get(0).message().content());
 
