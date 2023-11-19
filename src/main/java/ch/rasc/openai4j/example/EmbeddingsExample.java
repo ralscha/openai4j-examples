@@ -40,12 +40,12 @@ public class EmbeddingsExample {
 		System.out.println(Arrays.toString(embeddings));
 		System.out.println(Arrays.equals(embeddings,
 				response2.data().get(1).embedding().doubleArray()));
-		
+
 		response = client.embeddings.create(r -> r.input("Monkey")
 				.encodingFormat(EncodingFormat.FLOAT).model("text-embedding-ada-002"));
 		embeddings = response.data().get(0).embedding().doubleArray();
 		System.out.println(Arrays.toString(embeddings));
 		System.out.println(Arrays.equals(embeddings,
-				response2.data().get(2).embedding().doubleArray()));		
+				response2.data().get(2).embedding().doubleArray()));
 	}
 }

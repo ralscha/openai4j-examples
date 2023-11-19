@@ -53,7 +53,7 @@ public class AssistantRetrievalExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("DocumentAnalyzer")
 					.instructions("You are a analyzer and summarizer of documents")
-					.addTools(RetrievalTool.of()).addFileId(file.id())
+					.addTools(RetrievalTool.of()).addFileIds(file.id())
 					.model("gpt-4-1106-preview"));
 		}
 
