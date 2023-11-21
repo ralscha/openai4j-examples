@@ -27,7 +27,7 @@ import ch.rasc.openai4j.common.SortOrder;
 import ch.rasc.openai4j.threads.messages.ThreadMessage;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 import ch.rasc.openai4j.threads.runs.ThreadRun.Status;
-import ch.rasc.openai4j.threads.runs.ThreadRunSubmitToolOutputsRequest.ToolOutput;
+import ch.rasc.openai4j.threads.runs.ToolOutput;
 
 public class AssistantsToolQuizExample {
 	public static void main(String[] args)
@@ -58,7 +58,8 @@ public class AssistantsToolQuizExample {
 
 		String userMessage = "Make a quiz with 2 questions: One open ended, one multiple choice. Then, give me feedback for the responses.";
 		var thread = client.threads.create();
-		client.threadsMessages.create(thread.id(), r -> r.content(userMessage));
+		client.threadsMessages.create(thread.id(),
+				r -> r.userRole().content(userMessage));
 
 		var run = client.threadsRuns.create(thread.id(),
 				r -> r.assistantId(assistant.id()));
@@ -73,12 +74,11 @@ public class AssistantsToolQuizExample {
 				DisplayQuiz dq = om.readValue(arguments, DisplayQuiz.class);
 				List<String> userResponse = displayQuiz(dq);
 				String userResponseString = om.writeValueAsString(userResponse);
-				ToolOutput output = ToolOutput.builder().toolCallId(toolCall.id())
-						.output(userResponseString).build();
+				ToolOutput output = new ToolOutput(toolCall.id(), userResponseString);
 				outputs.add(output);
 			}
 			run = client.threadsRuns.submitToolOutputs(thread.id(), run.id(),
-					r -> r.addAllToolOutputs(outputs));
+					r -> r.toolOutputs(outputs));
 			run = client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
 					TimeUnit.MINUTES);
 

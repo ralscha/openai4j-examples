@@ -7,8 +7,6 @@ import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.CodeTool;
 import ch.rasc.openai4j.common.SortOrder;
-import ch.rasc.openai4j.threads.ThreadCreateRunCreateRequest;
-import ch.rasc.openai4j.threads.ThreadMessageRequest;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
 public class AssistantsToolExample {
@@ -43,8 +41,7 @@ public class AssistantsToolExample {
 		client.assistants.update(assistant.id(), r -> r.addTools(CodeTool.of()));
 
 		run = client.threads.createAndRun(r -> r.assistantId(assistant.id())
-				.thread(ThreadCreateRunCreateRequest.Thread.of(
-						ThreadMessageRequest.builder().content(userMessage).build())));
+				.thread(t -> t.userRole().content(userMessage)));
 
 		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
 				TimeUnit.MINUTES);

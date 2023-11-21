@@ -16,9 +16,10 @@ public class ChatCompletionsExample {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
-		var response = client.chatCompletions
-				.create(r -> r.addMessages(SystemMessage.of("You are a helpful assistant"), UserMessage.of("What is the capital of Spain?"))
-						.model("gpt-4-1106-preview"));
+		var response = client.chatCompletions.create(r -> r
+				.addMessages(SystemMessage.of("You are a helpful assistant"),
+						UserMessage.of("What is the capital of Spain?"))
+				.model("gpt-4-1106-preview"));
 		System.out.println(response.choices().get(0).message().content());
 
 		EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
