@@ -1,11 +1,9 @@
 package ch.rasc.openai4j.example;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import ch.rasc.openai4j.OpenAIClient;
 
 public class FineTuningJobExample {
-	public static void main(String[] args) throws JsonProcessingException {
+	public static void main(String[] args) {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
