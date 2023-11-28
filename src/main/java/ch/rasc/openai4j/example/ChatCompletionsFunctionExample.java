@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.rasc.openai4j.OpenAIClient;
+import ch.rasc.openai4j.chatcompletions.ChatCompletionsService;
 import ch.rasc.openai4j.chatcompletions.JavaFunction;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
 
@@ -65,10 +66,12 @@ public class ChatCompletionsFunctionExample {
 		JavaFunction<Location, Float> getWeather = JavaFunction.of("get_temperature",
 				"Get the current temperature of a location", Location.class,
 				fetcher::fetchTemperature);
-
-		var response = client.chatCompletions.create(r -> r.addMessages(UserMessage.of(
+		
+		var service = new ChatCompletionsService(client.chatCompletions, om);
+		
+		var response = service.create(r -> r.addMessages(UserMessage.of(
 				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
-				.model("gpt-4-1106-preview"), List.of(getWeather), om, 1);
+				.model("gpt-4-1106-preview"), List.of(getWeather), 1);
 
 		var choice = response.choices().get(0);
 		System.out.println(choice.message().content());
