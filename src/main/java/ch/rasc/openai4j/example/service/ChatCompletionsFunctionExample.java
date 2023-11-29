@@ -1,4 +1,4 @@
-package ch.rasc.openai4j.example;
+package ch.rasc.openai4j.example.service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,6 +15,7 @@ import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.chatcompletions.ChatCompletionsService;
 import ch.rasc.openai4j.chatcompletions.JavaFunction;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
+import ch.rasc.openai4j.example.Util;
 
 public class ChatCompletionsFunctionExample {
 	private final static ObjectMapper om = new ObjectMapper();
@@ -63,16 +64,16 @@ public class ChatCompletionsFunctionExample {
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		TemperatureFetcher fetcher = new TemperatureFetcher();
-		JavaFunction<Location, Float> getWeather = JavaFunction.of("get_temperature",
+		String functionName = "get_temperature";
+		JavaFunction<Location, Float> getWeather = JavaFunction.of(functionName,
 				"Get the current temperature of a location", Location.class,
 				fetcher::fetchTemperature);
-		
+
 		var service = new ChatCompletionsService(client.chatCompletions, om);
-		
+
 		var response = service.create(r -> r.addMessages(UserMessage.of(
 				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
 				.model("gpt-4-1106-preview"), List.of(getWeather), 1);
-
 		var choice = response.choices().get(0);
 		System.out.println(choice.message().content());
 
