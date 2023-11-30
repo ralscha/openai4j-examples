@@ -28,7 +28,7 @@ public class UserExample {
 		ObjectMapper om = new ObjectMapper();
 		var service = new ChatCompletionsService(client.chatCompletions, om);
 
-		ChatCompletionsModelResponse<User> response = service.create(r -> r
+		ChatCompletionsModelResponse<User> response = service.createModel(r -> r
 				.addMessages(
 						UserMessage.of("Get user details for: Jason is 25 years old"))
 				.model("gpt-4-1106-preview").responseModel(User.class).mode(Mode.JSON)
@@ -38,7 +38,7 @@ public class UserExample {
 
 		System.out.println("=======");
 
-		response = service.create(r -> r
+		response = service.createModel(r -> r
 				.addMessages(
 						UserMessage.of("Get user details for: Jason is 25 years old"))
 				.model("gpt-4-1106-preview").responseModel(User.class).mode(Mode.TOOL)
@@ -48,7 +48,7 @@ public class UserExample {
 
 		System.out.println("=======");
 
-		response = service.create(
+		response = service.createModel(
 				r -> r.addMessages(UserMessage.of("Jason is a 25 years old scientist"))
 						.model("gpt-3.5-turbo-1106").responseModel(User.class)
 						.mode(Mode.TOOL).maxRetries(2));
@@ -57,7 +57,7 @@ public class UserExample {
 
 		System.out.println("=======");
 
-		response = service.create(
+		response = service.createModel(
 				r -> r.addMessages(UserMessage.of("Jason is a 25 years old scientist"))
 						.model("gpt-3.5-turbo-1106").responseModel(User.class)
 						.mode(Mode.JSON).maxRetries(2));

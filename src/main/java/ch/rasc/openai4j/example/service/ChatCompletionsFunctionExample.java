@@ -71,9 +71,9 @@ public class ChatCompletionsFunctionExample {
 
 		var service = new ChatCompletionsService(client.chatCompletions, om);
 
-		var response = service.create(r -> r.addMessages(UserMessage.of(
+		var response = service.createJavaFunctions(r -> r.addMessages(UserMessage.of(
 				"What are the current temperatures in Oslo, Norway and Helsinki, Finland?"))
-				.model("gpt-4-1106-preview"), List.of(getWeather), 1);
+				.model("gpt-4-1106-preview").javaFunctions(List.of(getWeather)));
 		var choice = response.choices().get(0);
 		System.out.println(choice.message().content());
 
