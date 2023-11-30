@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionsService;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionsService.Mode;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
+import ch.rasc.openai4j.chatcompletions.service.ChatCompletionsModelRequest.Mode;
+import ch.rasc.openai4j.chatcompletions.service.ChatCompletionsService;
+import ch.rasc.openai4j.chatcompletions.service.ChatCompletionsService.ChatCompletionsModelResponse;
 import ch.rasc.openai4j.example.Util;
 
 public class UserExample {
@@ -27,10 +28,11 @@ public class UserExample {
 		ObjectMapper om = new ObjectMapper();
 		var service = new ChatCompletionsService(client.chatCompletions, om);
 
-		var response = service.create(r -> r
+		ChatCompletionsModelResponse<User> response = service.create(r -> r
 				.addMessages(
 						UserMessage.of("Get user details for: Jason is 25 years old"))
-				.model("gpt-4-1106-preview"), User.class, Mode.JSON, 2);
+				.model("gpt-4-1106-preview").responseModel(User.class).mode(Mode.JSON)
+				.maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 
@@ -39,7 +41,8 @@ public class UserExample {
 		response = service.create(r -> r
 				.addMessages(
 						UserMessage.of("Get user details for: Jason is 25 years old"))
-				.model("gpt-4-1106-preview"), User.class, Mode.TOOL, 2);
+				.model("gpt-4-1106-preview").responseModel(User.class).mode(Mode.TOOL)
+				.maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 
@@ -47,8 +50,8 @@ public class UserExample {
 
 		response = service.create(
 				r -> r.addMessages(UserMessage.of("Jason is a 25 years old scientist"))
-						.model("gpt-3.5-turbo-1106"),
-				User.class, Mode.TOOL, 2);
+						.model("gpt-3.5-turbo-1106").responseModel(User.class)
+						.mode(Mode.TOOL).maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 
@@ -56,8 +59,8 @@ public class UserExample {
 
 		response = service.create(
 				r -> r.addMessages(UserMessage.of("Jason is a 25 years old scientist"))
-						.model("gpt-3.5-turbo-1106"),
-				User.class, Mode.JSON, 2);
+						.model("gpt-3.5-turbo-1106").responseModel(User.class)
+						.mode(Mode.JSON).maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 	}

@@ -12,9 +12,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionsService;
-import ch.rasc.openai4j.chatcompletions.JavaFunction;
 import ch.rasc.openai4j.chatcompletions.UserMessage;
+import ch.rasc.openai4j.chatcompletions.service.ChatCompletionsService;
+import ch.rasc.openai4j.chatcompletions.service.JavaFunction;
 import ch.rasc.openai4j.example.Util;
 
 public class ChatCompletionsFunctionExample {

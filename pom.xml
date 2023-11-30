@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.rasc</groupId>
 	<artifactId>openai4j-examples</artifactId>
-	<version>1.0.4</version>
+	<version>1.1.0</version>
 	<name>openai4j-examples</name>
 	<developers>
 		<developer>
@@ -40,7 +40,7 @@
 		<dependency>
 		    <groupId>ch.rasc</groupId>
 		    <artifactId>openai4j</artifactId>
-		    <version>1.0.5-SNAPSHOT</version>
+		    <version>1.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.knuddels</groupId>
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>1.4.11</version>
+			<version>1.4.13</version>
 		</dependency>
 	</dependencies>
 	<build>
