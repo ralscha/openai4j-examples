@@ -40,7 +40,7 @@
 		<dependency>
 		    <groupId>ch.rasc</groupId>
 		    <artifactId>openai4j</artifactId>
-		    <version>1.1.1-SNAPSHOT</version>
+		    <version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.knuddels</groupId>
