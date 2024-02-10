@@ -6,9 +6,11 @@ import java.nio.file.Paths;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.audio.AudioRecognitionModel;
+import ch.rasc.openai4j.audio.AudioRecognitionResponseFormat;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.AudioResponseFormat;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.SpeechModel;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.Voice;
+import ch.rasc.openai4j.audio.AudioTranscriptionRequest.TimestampGranularities;
 import feign.Response;
 
 public class AudioExample {
@@ -32,8 +34,10 @@ public class AudioExample {
 		}
 
 		Path inp = Paths.get("hello.mp3");
-		var resp = client.audio.transcriptionsCreate(
-				r -> r.model(AudioRecognitionModel.WHISPER_1).file(inp));
+		var resp = client.audio.transcriptionsCreate(r -> r
+				.model(AudioRecognitionModel.WHISPER_1)
+				.responseFormat(AudioRecognitionResponseFormat.VERBOSE_JSON)
+				.addTimestampGranularities(TimestampGranularities.WORD, TimestampGranularities.SEGMENT).file(inp));
 		System.out.println(resp);
 
 		var resp2 = client.audio.translationsCreate(
