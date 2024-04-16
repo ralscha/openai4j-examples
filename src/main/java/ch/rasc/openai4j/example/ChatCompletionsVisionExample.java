@@ -20,10 +20,11 @@ public class ChatCompletionsVisionExample {
 		content.add(ImageContent.of(
 				"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg"));
 
-		var response = client.chatCompletions.create(r -> r
-				.addMessages(SystemMessage.of("You are a helpful assistant"),
-						UserMessage.of(content))
-				.model("gpt-4-vision-preview").maxTokens(300));
+		var response = client.chatCompletions
+				.create(r -> r
+						.addMessages(SystemMessage.of("You are a helpful assistant"),
+								UserMessage.of(content))
+						.model("gpt-4-turbo").maxTokens(300));
 		System.out.println(response.choices().get(0).message().content());
 
 	}

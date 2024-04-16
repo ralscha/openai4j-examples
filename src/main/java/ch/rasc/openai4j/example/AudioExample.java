@@ -34,10 +34,12 @@ public class AudioExample {
 		}
 
 		Path inp = Paths.get("hello.mp3");
-		var resp = client.audio.transcriptionsCreate(r -> r
-				.model(AudioRecognitionModel.WHISPER_1)
-				.responseFormat(AudioRecognitionResponseFormat.VERBOSE_JSON)
-				.addTimestampGranularities(TimestampGranularities.WORD, TimestampGranularities.SEGMENT).file(inp));
+		var resp = client.audio
+				.transcriptionsCreate(r -> r.model(AudioRecognitionModel.WHISPER_1)
+						.responseFormat(AudioRecognitionResponseFormat.VERBOSE_JSON)
+						.addTimestampGranularities(TimestampGranularities.WORD,
+								TimestampGranularities.SEGMENT)
+						.file(inp));
 		System.out.println(resp);
 
 		var resp2 = client.audio.translationsCreate(

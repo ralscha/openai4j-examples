@@ -1,10 +1,9 @@
 package ch.rasc.openai4j.example;
 
-import java.util.List;
-
 import com.knuddels.jtokkit.Encodings;
 import com.knuddels.jtokkit.api.Encoding;
 import com.knuddels.jtokkit.api.EncodingRegistry;
+import com.knuddels.jtokkit.api.IntArrayList;
 import com.knuddels.jtokkit.api.ModelType;
 
 import ch.rasc.openai4j.OpenAIClient;
@@ -19,18 +18,18 @@ public class ChatCompletionsExample {
 		var response = client.chatCompletions.create(r -> r
 				.addMessages(SystemMessage.of("You are a helpful assistant"),
 						UserMessage.of("What is the capital of Spain?"))
-				.logpropbs(true).model("gpt-4-1106-preview"));
+				.logpropbs(true).model("gpt-4-turbo"));
 		System.out.println(response.choices().get(0).message().content());
 		System.out.println(response.choices().get(0).logprobs());
 
 		EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
 		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4);
-		List<Integer> encoded = enc.encode("What is the capital of Spain?");
+		IntArrayList encoded = enc.encode("What is the capital of Spain?");
 		System.out.println("Token length: " + encoded.size());
 
 		/*
 		 * var azureClient = OpenAIClient
-		 * .create(Configuration.builder().apiVersion("2023-07-01-preview")
+		 * .create(Configuration.builder().apiVersion("2024-02-01")
 		 * .apiKey("...").azureDeployment("gpt-35-turbo")
 		 * .azureEndpoint("https://myresource.openai.azure.com/").build()); var request =
 		 * ChatCompletionsCreateRequest.builder()

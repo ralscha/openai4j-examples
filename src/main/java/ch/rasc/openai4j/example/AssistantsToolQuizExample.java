@@ -54,7 +54,7 @@ public class AssistantsToolQuizExample {
 						"display_quiz",
 						"Displays a quiz to the student, and returns the student's response. A single quiz can have multiple questions.",
 						jsonSchema)))
-				.model("gpt-4-1106-preview"));
+				.model("gpt-4-turbo"));
 
 		String userMessage = "Make a quiz with 2 questions: One open ended, one multiple choice. Then, give me feedback for the responses.";
 		var thread = client.threads.create();

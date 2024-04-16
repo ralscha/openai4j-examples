@@ -25,15 +25,16 @@ public class MathAssistantExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("Math Tutor").instructions(
 					"You are a personal math tutor. Write and run code to answer math questions.")
-					.addTools(CodeTool.of()).model("gpt-4-1106-preview"));
+					.addTools(CodeTool.of()).model("gpt-4-turbo"));
 		}
 		System.out.println(assistant);
 
 		var thread = client.threads.create();
 		System.out.println(thread);
 
-		var message = client.threadsMessages.create(thread.id(), c -> c.content(
-				"I need to solve the equation `3x + 11 = 14`. Can you help me?"));
+		var message = client.threadsMessages.create(thread.id(),
+				c -> c.userRole().content(
+						"I need to solve the equation `3x + 11 = 14`. Can you help me?"));
 		System.out.println(message);
 
 		final Assistant af = assistant;

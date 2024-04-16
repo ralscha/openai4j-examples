@@ -17,13 +17,13 @@ public class AssistantsExample {
 			System.out.println(a);
 		}
 
-		var c = client.assistants.create(r -> r.description("my test assistant")
-				.name("ralph").model("gpt-4-1106-preview")
-				.instructions("you are a helpul assistant").putMetadata("userId", "1")
-				.addTools(RetrievalTool.of()));
+		var c = client.assistants
+				.create(r -> r.description("my test assistant").name("ralph")
+						.model("gpt-4-turbo").instructions("you are a helpul assistant")
+						.putMetadata("userId", "1").addTools(RetrievalTool.of()));
 		System.out.println(c);
 
-		Path p = Paths.get("LICENSE");
+		Path p = Paths.get("README.md");
 		var f = client.files.createForAssistants(p);
 		System.out.println(f);
 		var r = client.assistantsFiles.create(c.id(), ra -> ra.fileId(f.id()));
