@@ -47,7 +47,7 @@ public class BatchExample {
 			Files.writeString(tmpFile, json + "\n",
 					java.nio.file.StandardOpenOption.APPEND);
 		}
-		var response = client.files.create(tmpFile, Purpose.BATCH);
+		var response = client.files.upload(tmpFile, Purpose.BATCH);
 
 		var batchResponse = client.batches.create(c -> c.inputFileId(response.id()));
 		System.out.println(batchResponse);
