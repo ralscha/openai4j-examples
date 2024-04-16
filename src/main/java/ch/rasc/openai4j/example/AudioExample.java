@@ -10,7 +10,7 @@ import ch.rasc.openai4j.audio.AudioRecognitionResponseFormat;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.AudioResponseFormat;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.SpeechModel;
 import ch.rasc.openai4j.audio.AudioSpeechRequest.Voice;
-import ch.rasc.openai4j.audio.AudioTranscriptionRequest.TimestampGranularities;
+import ch.rasc.openai4j.audio.AudioTranscriptionRequest.TimestampGranularity;
 import feign.Response;
 
 public class AudioExample {
@@ -37,8 +37,8 @@ public class AudioExample {
 		var resp = client.audio
 				.transcriptionsCreate(r -> r.model(AudioRecognitionModel.WHISPER_1)
 						.responseFormat(AudioRecognitionResponseFormat.VERBOSE_JSON)
-						.addTimestampGranularities(TimestampGranularities.WORD,
-								TimestampGranularities.SEGMENT)
+						.addTimestampGranularities(TimestampGranularity.WORD,
+								TimestampGranularity.SEGMENT)
 						.file(inp));
 		System.out.println(resp);
 
