@@ -14,30 +14,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.batch.BatchRequestInput;
 import ch.rasc.openai4j.batch.BatchRequestOutput;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionCreateRequest;
-import ch.rasc.openai4j.chatcompletions.ChatCompletionResponse;
-import ch.rasc.openai4j.chatcompletions.UserMessage;
+import ch.rasc.openai4j.embeddings.EmbeddingCreateRequest;
+import ch.rasc.openai4j.embeddings.EmbeddingCreateResponse;
 import ch.rasc.openai4j.files.Purpose;
 
-public class BatchExample {
+public class BatchEmbeddingExample {
 	public static void main(String[] args) throws IOException {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		var request1 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
-				.maxTokens(100)
-				.addMessages(UserMessage
-						.of("What movie is this quote from \"Once upon a time\""))
+		var request1 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
+				.input("What movie is this quote from \"Once upon a time\"")
 				.build();
-		var request2 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
-				.maxTokens(100).addMessages(UserMessage.of("Where is Spain")).build();
-		var request3 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
-				.maxTokens(100)
-				.addMessages(UserMessage.of("What is the capital of Spain?")).build();
+		var request2 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
+				.input("Where is Spain")
+				.build();
+		var request3 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
+				.input("What is the capital of Spain?")
+				.build();
 
-		List<BatchRequestInput<ChatCompletionCreateRequest>> batchRequestInputs = List.of(
+		List<BatchRequestInput<EmbeddingCreateRequest>> batchRequestInputs = 
+				List.of(
 				BatchRequestInput.of("1", request1), BatchRequestInput.of("2", request2),
 				BatchRequestInput.of("3", request3));
 
@@ -49,7 +48,7 @@ public class BatchExample {
 		}
 		var response = client.files.upload(tmpFile, Purpose.BATCH);
 
-		var batchResponse = client.batches.create(c -> c.inputFileId(response.id()));
+		var batchResponse = client.batches.create(c -> c.inputFileId(response.id()).endpoint("/v1/embeddings"));
 		System.out.println(batchResponse);
 
 		while (true) {
@@ -80,10 +79,9 @@ public class BatchExample {
 
 				for (var line : lines) {
 					var output = objectMapper.readValue(line,
-							new TypeReference<BatchRequestOutput<ChatCompletionResponse>>() {
+							new TypeReference<BatchRequestOutput<EmbeddingCreateResponse>>() {
 							});
-					System.out.println(output.response().body().choices().get(0).message()
-							.content());
+					System.out.println(output.response().body().data());
 				}
 			}
 		}
