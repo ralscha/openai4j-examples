@@ -26,17 +26,13 @@ public class BatchEmbeddingExample {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		var request1 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
-				.input("What movie is this quote from \"Once upon a time\"")
-				.build();
+				.input("What movie is this quote from \"Once upon a time\"").build();
 		var request2 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
-				.input("Where is Spain")
-				.build();
+				.input("Where is Spain").build();
 		var request3 = EmbeddingCreateRequest.builder().model("text-embedding-3-small")
-				.input("What is the capital of Spain?")
-				.build();
+				.input("What is the capital of Spain?").build();
 
-		List<BatchRequestInput<EmbeddingCreateRequest>> batchRequestInputs = 
-				List.of(
+		List<BatchRequestInput<EmbeddingCreateRequest>> batchRequestInputs = List.of(
 				BatchRequestInput.of("1", request1), BatchRequestInput.of("2", request2),
 				BatchRequestInput.of("3", request3));
 
@@ -48,7 +44,8 @@ public class BatchEmbeddingExample {
 		}
 		var response = client.files.upload(tmpFile, Purpose.BATCH);
 
-		var batchResponse = client.batches.create(c -> c.inputFileId(response.id()).endpoint("/v1/embeddings"));
+		var batchResponse = client.batches
+				.create(c -> c.inputFileId(response.id()).endpoint("/v1/embeddings"));
 		System.out.println(batchResponse);
 
 		while (true) {

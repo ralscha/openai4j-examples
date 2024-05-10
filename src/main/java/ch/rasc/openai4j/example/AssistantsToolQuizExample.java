@@ -98,7 +98,7 @@ public class AssistantsToolQuizExample {
 		for (var msg : messages) {
 			var content = msg.content().get(0);
 			if (content instanceof TextMessageContent text) {
-				System.out.println(msg.role() + ": " + text.text());
+				System.out.println(msg.role() + ": " + text.text().value());
 			}
 		}
 		System.out.println();

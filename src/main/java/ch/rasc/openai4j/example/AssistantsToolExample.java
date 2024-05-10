@@ -39,7 +39,8 @@ public class AssistantsToolExample {
 		prettyPrint(messages.data());
 
 		// With the Code tool
-		client.assistants.modify(assistant.id(), r -> r.addTools(CodeInterpreterTool.of()));
+		client.assistants.modify(assistant.id(),
+				r -> r.addTools(CodeInterpreterTool.of()));
 
 		run = client.threads.createAndRun(r -> r.assistantId(assistant.id())
 				.thread(t -> t.userRole().content(userMessage)));
@@ -59,7 +60,7 @@ public class AssistantsToolExample {
 		for (var msg : messages) {
 			var content = msg.content().get(0);
 			if (content instanceof TextMessageContent text) {
-				System.out.println(msg.role() + ": " + text.text());
+				System.out.println(msg.role() + ": " + text.text().value());
 			}
 		}
 		System.out.println();

@@ -51,7 +51,7 @@ public class MathAssistantExample {
 		for (var msg : messages.data()) {
 			var content = msg.content().get(0);
 			if (content instanceof TextMessageContent text) {
-				System.out.println(text.text());
+				System.out.println(text.text().value());
 			}
 		}
 

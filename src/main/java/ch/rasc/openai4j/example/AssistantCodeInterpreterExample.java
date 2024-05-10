@@ -11,12 +11,12 @@ import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
-import ch.rasc.openai4j.assistants.RetrievalTool;
+import ch.rasc.openai4j.assistants.CodeInterpreterTool;
+import ch.rasc.openai4j.assistants.ToolResources;
 import ch.rasc.openai4j.files.FileObject;
 import ch.rasc.openai4j.threads.TextMessageContent;
-import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
-public class AssistantRetrievalExample {
+public class AssistantCodeInterpreterExample {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
@@ -54,7 +54,9 @@ public class AssistantRetrievalExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("DocumentAnalyzer")
 					.instructions("You are a analyzer and summarizer of documents")
-					.addTools(RetrievalTool.of()).addFileIds(file.id())
+					.addTools(CodeInterpreterTool.of())
+					.toolResources(ToolResources
+							.ofCodeInterpreter(r -> r.addFileIds(file.id())))
 					.model("gpt-4-turbo"));
 		}
 
@@ -74,7 +76,7 @@ public class AssistantRetrievalExample {
 		for (var msg : messages.data()) {
 			var content = msg.content().get(0);
 			if (content instanceof TextMessageContent text) {
-				System.out.println(text.text());
+				System.out.println(text.text().value());
 			}
 		}
 
