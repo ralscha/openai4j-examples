@@ -1,11 +1,8 @@
 package ch.rasc.openai4j.example;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.assistants.RetrievalTool;
+import ch.rasc.openai4j.assistants.CodeInterpreterTool;
 
 public class AssistantsExample {
 	public static void main(String[] args) {
@@ -20,32 +17,8 @@ public class AssistantsExample {
 		var c = client.assistants
 				.create(r -> r.description("my test assistant").name("ralph")
 						.model("gpt-4-turbo").instructions("you are a helpul assistant")
-						.putMetadata("userId", "1").addTools(RetrievalTool.of()));
+						.putMetadata("userId", "1").addTools(CodeInterpreterTool.of()));
 		System.out.println(c);
-
-		Path p = Paths.get("README.md");
-		var f = client.files.createForAssistants(p);
-		System.out.println(f);
-		var r = client.assistantsFiles.create(c.id(), ra -> ra.fileId(f.id()));
-		System.out.println(r);
-
-		var r2 = client.assistantsFiles.list(c.id());
-		System.out.println(r2);
-
-		var r3 = client.assistantsFiles.retrieve(c.id(), f.id());
-		System.out.println(r3);
-
-		var d = client.assistantsFiles.delete(c.id(), f.id());
-		System.out.println(d);
-
-		var d2 = client.files.delete(f.id());
-		System.out.println(d2);
-
-		var ll = client.files.list();
-		for (var lll : ll.data()) {
-			var ddd = client.files.delete(lll.id());
-			System.out.println(ddd);
-		}
 
 		var m = client.assistants.modify(c.id(),
 				ra -> ra.description("my test assistant2").name("ralph2")
@@ -64,5 +37,6 @@ public class AssistantsExample {
 		for (var a : assistants.data()) {
 			System.out.println(a);
 		}
+		
 	}
 }
