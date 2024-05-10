@@ -47,7 +47,7 @@ public class AssistantsExample {
 			System.out.println(ddd);
 		}
 
-		var m = client.assistants.update(c.id(),
+		var m = client.assistants.modify(c.id(),
 				ra -> ra.description("my test assistant2").name("ralph2")
 						.putMetadata("userId", "2"));
 		System.out.println(m);

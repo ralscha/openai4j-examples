@@ -1,14 +1,11 @@
 package ch.rasc.openai4j.example;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.threads.Thread;
 import ch.rasc.openai4j.threads.ThreadCreateRequest;
-import ch.rasc.openai4j.threads.ThreadUpdateRequest;
 
 public class ThreadsExample {
 	public static void main(String[] args) throws JsonProcessingException {
@@ -26,8 +23,7 @@ public class ThreadsExample {
 		var r = client.threads.retrieve(response.id());
 		System.out.println(r);
 
-		var ru = client.threads.update(response.id(),
-				ThreadUpdateRequest.of(Map.of("name", "john")));
+		var ru = client.threads.modify(response.id(), t -> t.putMetadata("name", "john"));
 		System.out.println(ru);
 
 		r = client.threads.retrieve(response.id());

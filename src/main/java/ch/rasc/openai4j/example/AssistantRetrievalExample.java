@@ -13,6 +13,7 @@ import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.RetrievalTool;
 import ch.rasc.openai4j.files.FileObject;
+import ch.rasc.openai4j.threads.TextMessageContent;
 import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 
 public class AssistantRetrievalExample {
@@ -72,8 +73,8 @@ public class AssistantRetrievalExample {
 				p -> p.before(message.id()));
 		for (var msg : messages.data()) {
 			var content = msg.content().get(0);
-			if (content instanceof MessageContentText text) {
-				System.out.println(text.text().value());
+			if (content instanceof TextMessageContent text) {
+				System.out.println(text.text());
 			}
 		}
 

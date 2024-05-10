@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
-import ch.rasc.openai4j.assistants.CodeTool;
-import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
+import ch.rasc.openai4j.assistants.CodeInterpreterTool;
+import ch.rasc.openai4j.threads.TextMessageContent;
 
 public class MathAssistantExample {
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class MathAssistantExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("Math Tutor").instructions(
 					"You are a personal math tutor. Write and run code to answer math questions.")
-					.addTools(CodeTool.of()).model("gpt-4-turbo"));
+					.addTools(CodeInterpreterTool.of()).model("gpt-4-turbo"));
 		}
 		System.out.println(assistant);
 
@@ -50,8 +50,8 @@ public class MathAssistantExample {
 				p -> p.before(message.id()));
 		for (var msg : messages.data()) {
 			var content = msg.content().get(0);
-			if (content instanceof MessageContentText text) {
-				System.out.println(text.text().value());
+			if (content instanceof TextMessageContent text) {
+				System.out.println(text.text());
 			}
 		}
 

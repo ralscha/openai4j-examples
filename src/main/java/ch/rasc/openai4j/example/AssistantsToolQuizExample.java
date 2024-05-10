@@ -20,12 +20,12 @@ import com.github.victools.jsonschema.module.jackson.JacksonOption;
 
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.assistants.CodeTool;
+import ch.rasc.openai4j.assistants.CodeInterpreterTool;
 import ch.rasc.openai4j.assistants.FunctionTool;
 import ch.rasc.openai4j.common.FunctionParameters;
 import ch.rasc.openai4j.common.SortOrder;
+import ch.rasc.openai4j.threads.TextMessageContent;
 import ch.rasc.openai4j.threads.messages.ThreadMessage;
-import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
 import ch.rasc.openai4j.threads.runs.ThreadRun.Status;
 import ch.rasc.openai4j.threads.runs.ToolOutput;
 
@@ -50,7 +50,7 @@ public class AssistantsToolQuizExample {
 
 		var assistant = client.assistants.create(r -> r.name("Math Tutor")
 				.instructions("You are a personal math tutor")
-				.addTools(CodeTool.of(), FunctionTool.of(FunctionParameters.of(
+				.addTools(CodeInterpreterTool.of(), FunctionTool.of(FunctionParameters.of(
 						"display_quiz",
 						"Displays a quiz to the student, and returns the student's response. A single quiz can have multiple questions.",
 						jsonSchema)))
@@ -97,8 +97,8 @@ public class AssistantsToolQuizExample {
 		System.out.println("# Messages");
 		for (var msg : messages) {
 			var content = msg.content().get(0);
-			if (content instanceof MessageContentText text) {
-				System.out.println(msg.role() + ": " + text.text().value());
+			if (content instanceof TextMessageContent text) {
+				System.out.println(msg.role() + ": " + text.text());
 			}
 		}
 		System.out.println();

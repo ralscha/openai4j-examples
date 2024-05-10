@@ -5,9 +5,9 @@ import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
-import ch.rasc.openai4j.assistants.CodeTool;
+import ch.rasc.openai4j.assistants.CodeInterpreterTool;
 import ch.rasc.openai4j.common.SortOrder;
-import ch.rasc.openai4j.threads.messages.ThreadMessage.MessageContentText;
+import ch.rasc.openai4j.threads.TextMessageContent;
 
 public class AssistantsToolExample {
 	public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class AssistantsToolExample {
 		prettyPrint(messages.data());
 
 		// With the Code tool
-		client.assistants.update(assistant.id(), r -> r.addTools(CodeTool.of()));
+		client.assistants.modify(assistant.id(), r -> r.addTools(CodeInterpreterTool.of()));
 
 		run = client.threads.createAndRun(r -> r.assistantId(assistant.id())
 				.thread(t -> t.userRole().content(userMessage)));
@@ -58,8 +58,8 @@ public class AssistantsToolExample {
 		System.out.println("# Messages");
 		for (var msg : messages) {
 			var content = msg.content().get(0);
-			if (content instanceof MessageContentText text) {
-				System.out.println(msg.role() + ": " + text.text().value());
+			if (content instanceof TextMessageContent text) {
+				System.out.println(msg.role() + ": " + text.text());
 			}
 		}
 		System.out.println();
