@@ -1,10 +1,11 @@
-package ch.rasc.openai4j.example;
+package ch.rasc.openai4j.example.assistants;
 
 import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.CodeInterpreterTool;
+import ch.rasc.openai4j.example.Util;
 import ch.rasc.openai4j.threads.TextMessageContent;
 
 public class MathAssistantExample {

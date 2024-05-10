@@ -1,4 +1,4 @@
-package ch.rasc.openai4j.example;
+package ch.rasc.openai4j.example.assistants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +24,7 @@ import ch.rasc.openai4j.assistants.CodeInterpreterTool;
 import ch.rasc.openai4j.assistants.FunctionTool;
 import ch.rasc.openai4j.common.FunctionParameters;
 import ch.rasc.openai4j.common.SortOrder;
+import ch.rasc.openai4j.example.Util;
 import ch.rasc.openai4j.threads.TextMessageContent;
 import ch.rasc.openai4j.threads.messages.ThreadMessage;
 import ch.rasc.openai4j.threads.runs.ThreadRun.Status;

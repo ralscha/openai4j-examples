@@ -18,7 +18,7 @@ public class ModelsExample {
 		var modelDetail = client.models.retrieve(model);
 		System.out.println(modelDetail);
 
-		var delete = client.models.delete("ft:gpt-3.5-turbo-1106:legal-i-ch::8Q2yAxaf");
+		var delete = client.models.delete("ft:gpt-3.5-turbo-0125:legal-i-ch::8Q2yAxaf");
 		System.out.println(delete);
 
 		System.out.println();

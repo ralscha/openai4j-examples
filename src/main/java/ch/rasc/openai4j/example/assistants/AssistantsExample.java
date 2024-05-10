@@ -1,8 +1,9 @@
-package ch.rasc.openai4j.example;
+package ch.rasc.openai4j.example.assistants;
 
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.CodeInterpreterTool;
+import ch.rasc.openai4j.example.Util;
 
 public class AssistantsExample {
 	public static void main(String[] args) {

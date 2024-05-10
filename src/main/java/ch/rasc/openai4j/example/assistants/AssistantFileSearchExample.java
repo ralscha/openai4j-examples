@@ -1,4 +1,4 @@
-package ch.rasc.openai4j.example;
+package ch.rasc.openai4j.example.assistants;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,12 +11,14 @@ import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
-import ch.rasc.openai4j.assistants.CodeInterpreterTool;
+import ch.rasc.openai4j.assistants.FileSearchTool;
 import ch.rasc.openai4j.assistants.ToolResources;
+import ch.rasc.openai4j.example.Util;
 import ch.rasc.openai4j.files.FileObject;
 import ch.rasc.openai4j.threads.TextMessageContent;
+import ch.rasc.openai4j.vectorstores.VectorStore;
 
-public class AssistantCodeInterpreterExample {
+public class AssistantFileSearchExample {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		String apiKey = Util.getApiKey();
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
@@ -40,6 +42,9 @@ public class AssistantCodeInterpreterExample {
 
 			Files.delete(tmpFile);
 		}
+		
+		VectorStore vectorStore = client.vectorStores
+				.create(c -> c.name("DocumentAnalyzer").addFileIds(file.id()));
 
 		var assistants = client.assistants.list();
 		Assistant assistant = null;
@@ -54,9 +59,8 @@ public class AssistantCodeInterpreterExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("DocumentAnalyzer")
 					.instructions("You are a analyzer and summarizer of documents")
-					.addTools(CodeInterpreterTool.of())
-					.toolResources(ToolResources
-							.ofCodeInterpreter(r -> r.addFileIds(file.id())))
+					.addTools(FileSearchTool.of())
+					.toolResources(ToolResources.ofFileSearch(r->r.vectorStoreId(vectorStore.id())))
 					.model("gpt-4-turbo"));
 		}
 
@@ -81,6 +85,7 @@ public class AssistantCodeInterpreterExample {
 		}
 
 		client.assistants.delete(assistant.id());
+		client.vectorStores.delete(vectorStore.id());
 		client.files.delete(file.id());
 
 	}
