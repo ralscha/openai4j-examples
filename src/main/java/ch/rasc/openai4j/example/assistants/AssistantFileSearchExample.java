@@ -62,7 +62,7 @@ public class AssistantFileSearchExample {
 					.instructions("You are a analyzer and summarizer of documents")
 					.addTools(FileSearchTool.of())
 					.toolResources(ToolResources
-							.ofFileSearch(r -> r.vectorStoreId(vectorStoreId)))
+							.ofFileSearch(r -> r.vectorStoreIds(vectorStoreId)))
 					.model("gpt-4-turbo"));
 		}
 
