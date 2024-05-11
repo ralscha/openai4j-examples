@@ -3,7 +3,6 @@ package ch.rasc.openai4j.example.assistants;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -64,8 +63,7 @@ public class AssistantsToolQuizExample {
 
 		var run = client.threadsRuns.create(thread.id(),
 				r -> r.assistantId(assistant.id()));
-		run = client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
-				TimeUnit.MINUTES);
+		run = client.threadsRuns.waitForProcessing(run);
 
 		if (run.status() == Status.REQUIRES_ACTION) {
 			List<ToolOutput> outputs = new ArrayList<>();
@@ -80,8 +78,7 @@ public class AssistantsToolQuizExample {
 			}
 			run = client.threadsRuns.submitToolOutputs(thread.id(), run.id(),
 					r -> r.toolOutputs(outputs));
-			run = client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
-					TimeUnit.MINUTES);
+			run = client.threadsRuns.waitForProcessing(run);
 
 			var messages = client.threadsMessages.list(run.threadId(),
 					r -> r.order(SortOrder.ASC));

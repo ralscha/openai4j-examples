@@ -1,7 +1,5 @@
 package ch.rasc.openai4j.example.assistants;
 
-import java.util.concurrent.TimeUnit;
-
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
 import ch.rasc.openai4j.assistants.CodeInterpreterTool;
@@ -43,8 +41,7 @@ public class MathAssistantExample {
 				c -> c.assistantId(af.id()).instructions(
 						"Please address the user as Jane Doe. The user has a premium account."));
 
-		client.threadsRuns.waitForProcessing(run, 30, TimeUnit.SECONDS, 2,
-				TimeUnit.MINUTES);
+		client.threadsRuns.waitForProcessing(run);
 
 		System.out.println("Messages from the assistant");
 		var messages = client.threadsMessages.list(thread.id(),

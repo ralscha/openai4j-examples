@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
@@ -42,10 +41,12 @@ public class AssistantFileSearchExample {
 
 			Files.delete(tmpFile);
 		}
-		
+
 		VectorStore vectorStore = client.vectorStores
 				.create(c -> c.name("DocumentAnalyzer").addFileIds(file.id()));
+		vectorStore = client.vectorStores.waitForProcessing(vectorStore.id());
 
+		String vectorStoreId = vectorStore.id();
 		var assistants = client.assistants.list();
 		Assistant assistant = null;
 
@@ -60,7 +61,8 @@ public class AssistantFileSearchExample {
 			assistant = client.assistants.create(c -> c.name("DocumentAnalyzer")
 					.instructions("You are a analyzer and summarizer of documents")
 					.addTools(FileSearchTool.of())
-					.toolResources(ToolResources.ofFileSearch(r->r.vectorStoreId(vectorStore.id())))
+					.toolResources(ToolResources
+							.ofFileSearch(r -> r.vectorStoreId(vectorStoreId)))
 					.model("gpt-4-turbo"));
 		}
 
@@ -72,8 +74,7 @@ public class AssistantFileSearchExample {
 
 		final Assistant af = assistant;
 		var run = client.threadsRuns.create(thread.id(), c -> c.assistantId(af.id()));
-		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 2,
-				TimeUnit.MINUTES);
+		client.threadsRuns.waitForProcessing(run);
 
 		var messages = client.threadsMessages.list(thread.id(),
 				p -> p.before(message.id()));

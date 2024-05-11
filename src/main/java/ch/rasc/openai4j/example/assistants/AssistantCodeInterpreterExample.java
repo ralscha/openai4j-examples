@@ -7,7 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.Assistant;
@@ -56,8 +55,8 @@ public class AssistantCodeInterpreterExample {
 			assistant = client.assistants.create(c -> c.name("DocumentAnalyzer")
 					.instructions("You are a analyzer and summarizer of documents")
 					.addTools(CodeInterpreterTool.of())
-					.toolResources(ToolResources
-							.ofCodeInterpreter(r -> r.addFileIds(file.id())))
+					.toolResources(
+							ToolResources.ofCodeInterpreter(r -> r.addFileIds(file.id())))
 					.model("gpt-4-turbo"));
 		}
 
@@ -69,8 +68,7 @@ public class AssistantCodeInterpreterExample {
 
 		final Assistant af = assistant;
 		var run = client.threadsRuns.create(thread.id(), c -> c.assistantId(af.id()));
-		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 2,
-				TimeUnit.MINUTES);
+		client.threadsRuns.waitForProcessing(run);
 
 		var messages = client.threadsMessages.list(thread.id(),
 				p -> p.before(message.id()));

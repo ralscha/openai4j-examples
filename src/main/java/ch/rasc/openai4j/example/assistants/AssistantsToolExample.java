@@ -1,7 +1,6 @@
 package ch.rasc.openai4j.example.assistants;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
@@ -32,8 +31,7 @@ public class AssistantsToolExample {
 
 		var run = client.threadsRuns.create(thread.id(),
 				r -> r.assistantId(assistant.id()));
-		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
-				TimeUnit.MINUTES);
+		client.threadsRuns.waitForProcessing(run);
 
 		var messages = client.threadsMessages.list(thread.id(),
 				r -> r.order(SortOrder.ASC));
@@ -46,8 +44,7 @@ public class AssistantsToolExample {
 		run = client.threads.createAndRun(r -> r.assistantId(assistant.id())
 				.thread(t -> t.userRole().content(userMessage)));
 
-		client.threadsRuns.waitForProcessing(run, 10, TimeUnit.SECONDS, 1,
-				TimeUnit.MINUTES);
+		client.threadsRuns.waitForProcessing(run);
 
 		messages = client.threadsMessages.list(run.threadId(),
 				r -> r.order(SortOrder.ASC));

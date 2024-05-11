@@ -38,6 +38,6 @@ public class AssistantsExample {
 		for (var a : assistants.data()) {
 			System.out.println(a);
 		}
-		
+
 	}
 }
