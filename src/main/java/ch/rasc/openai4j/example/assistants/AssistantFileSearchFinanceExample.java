@@ -23,7 +23,7 @@ public class AssistantFileSearchFinanceExample {
 
 		var assistant = client.assistants.create(c -> c
 				.name("Financial Analyst Assistant")
-				.model("gpt-4-turbo")
+				.model("gpt-4o")
 				.instructions(
 						"You are an expert financial analyst. Use you knowledge base to answer questions about audited financial statements.")
 				.addTools(FileSearchTool.of()));

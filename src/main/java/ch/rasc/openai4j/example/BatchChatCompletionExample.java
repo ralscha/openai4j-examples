@@ -26,14 +26,14 @@ public class BatchChatCompletionExample {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
-		var request1 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
+		var request1 = ChatCompletionCreateRequest.builder().model("gpt-4o")
 				.maxTokens(100)
 				.addMessages(UserMessage
 						.of("What movie is this quote from \"Once upon a time\""))
 				.build();
-		var request2 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
+		var request2 = ChatCompletionCreateRequest.builder().model("gpt-4o")
 				.maxTokens(100).addMessages(UserMessage.of("Where is Spain")).build();
-		var request3 = ChatCompletionCreateRequest.builder().model("gpt-4-turbo")
+		var request3 = ChatCompletionCreateRequest.builder().model("gpt-4o")
 				.maxTokens(100)
 				.addMessages(UserMessage.of("What is the capital of Spain?")).build();
 

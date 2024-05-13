@@ -25,7 +25,7 @@ public class ClassificationExample {
 
 		var response = service.<Prediction>createModel(r -> r.addMessages(UserMessage.of(
 				"Classify the following text: Hello there I'm a nigerian prince and I want to give you money"))
-				.model("gpt-4-turbo").responseModel(Prediction.class).mode(Mode.JSON)
+				.model("gpt-4o").responseModel(Prediction.class).mode(Mode.JSON)
 				.maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());

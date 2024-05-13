@@ -63,7 +63,7 @@ public class AssistantFileSearchExample {
 					.addTools(FileSearchTool.of())
 					.toolResources(ToolResources
 							.ofFileSearch(r -> r.vectorStoreIds(vectorStoreId)))
-					.model("gpt-4-turbo"));
+					.model("gpt-4o"));
 		}
 
 		var thread = client.threads.create();

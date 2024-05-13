@@ -17,7 +17,7 @@ public class AssistantsExample {
 
 		var c = client.assistants
 				.create(r -> r.description("my test assistant").name("ralph")
-						.model("gpt-4-turbo").instructions("you are a helpul assistant")
+						.model("gpt-4o").instructions("you are a helpul assistant")
 						.putMetadata("userId", "1").addTools(CodeInterpreterTool.of()));
 		System.out.println(c);
 

@@ -24,7 +24,7 @@ public class ChatCompletionsVisionExample {
 				.create(r -> r
 						.addMessages(SystemMessage.of("You are a helpful assistant"),
 								UserMessage.of(content))
-						.model("gpt-4-turbo").maxTokens(300));
+						.model("gpt-4o").maxTokens(300));
 		System.out.println(response.choices().get(0).message().content());
 
 	}

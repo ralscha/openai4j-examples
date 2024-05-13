@@ -24,7 +24,7 @@ public class MathAssistantExample {
 		if (assistant == null) {
 			assistant = client.assistants.create(c -> c.name("Math Tutor").instructions(
 					"You are a personal math tutor. Write and run code to answer math questions.")
-					.addTools(CodeInterpreterTool.of()).model("gpt-4-turbo"));
+					.addTools(CodeInterpreterTool.of()).model("gpt-4o"));
 		}
 		System.out.println(assistant);
 

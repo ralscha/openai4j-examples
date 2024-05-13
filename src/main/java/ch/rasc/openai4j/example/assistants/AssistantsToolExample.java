@@ -22,7 +22,7 @@ public class AssistantsToolExample {
 		// Without the Code tool
 		var assistant = client.assistants.create(r -> r.name("Math Tutor").instructions(
 				"You are a personal math tutor. Answer questions briefly, in a sentence or less.")
-				.model("gpt-4-turbo"));
+				.model("gpt-4o"));
 
 		String userMessage = "Can you give me the solution of 3 * 3 + 2 * 2 - 1?";
 		var thread = client.threads.create();
