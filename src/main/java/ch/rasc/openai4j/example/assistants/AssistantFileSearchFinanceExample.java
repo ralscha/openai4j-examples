@@ -22,8 +22,7 @@ public class AssistantFileSearchFinanceExample {
 		var client = OpenAIClient.create(c -> c.apiKey(apiKey));
 
 		var assistant = client.assistants.create(c -> c
-				.name("Financial Analyst Assistant")
-				.model("gpt-4o")
+				.name("Financial Analyst Assistant").model("gpt-4o")
 				.instructions(
 						"You are an expert financial analyst. Use you knowledge base to answer questions about audited financial statements.")
 				.addTools(FileSearchTool.of()));
@@ -52,7 +51,7 @@ public class AssistantFileSearchFinanceExample {
 				"How many shares of AAPL were outstanding at the end of of October 2023.")
 				.addAttachment(
 						a -> a.fileId(file3Obj.id()).addTools(FileSearchTool.of()))));
-		
+
 		var assistantId = assistant.id();
 		var run = client.threadsRuns.create(thread.id(), c -> c.assistantId(assistantId));
 		run = client.threadsRuns.waitForProcessing(run);
@@ -78,7 +77,8 @@ public class AssistantFileSearchFinanceExample {
 
 		// delete everything
 		client.assistants.delete(assistantId);
-		thread.toolResources().fileSearch().vectorStoreIds().forEach(client.vectorStores::delete);
+		thread.toolResources().fileSearch().vectorStoreIds()
+				.forEach(client.vectorStores::delete);
 		client.vectorStores.delete(vectorStore.id());
 		client.files.delete(file1Obj.id());
 		client.files.delete(file2Obj.id());

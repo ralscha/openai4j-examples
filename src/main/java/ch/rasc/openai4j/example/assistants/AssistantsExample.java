@@ -15,10 +15,9 @@ public class AssistantsExample {
 			System.out.println(a);
 		}
 
-		var c = client.assistants
-				.create(r -> r.description("my test assistant").name("ralph")
-						.model("gpt-4o").instructions("you are a helpul assistant")
-						.putMetadata("userId", "1").addTools(CodeInterpreterTool.of()));
+		var c = client.assistants.create(r -> r.description("my test assistant")
+				.name("ralph").model("gpt-4o").instructions("you are a helpul assistant")
+				.putMetadata("userId", "1").addTools(CodeInterpreterTool.of()));
 		System.out.println(c);
 
 		var m = client.assistants.modify(c.id(),
