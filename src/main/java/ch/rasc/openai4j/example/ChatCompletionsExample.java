@@ -18,7 +18,7 @@ public class ChatCompletionsExample {
 		var response = client.chatCompletions.create(r -> r
 				.addMessages(SystemMessage.of("You are a helpful assistant"),
 						UserMessage.of("What is the capital of Spain?"))
-				.logpropbs(true).model("gpt-4o-mini"));
+				.logprobs(true).model("gpt-4o-mini"));
 		System.out.println(response.choices().get(0).message().content());
 		System.out.println(response.choices().get(0).logprobs());
 

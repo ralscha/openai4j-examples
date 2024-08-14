@@ -31,7 +31,8 @@ public class UserExample {
 		ChatCompletionsModelResponse<User> response = service.createModel(r -> r
 				.addMessages(
 						UserMessage.of("Get user details for: Jason is 25 years old"))
-				.model("gpt-4o").responseModel(User.class).mode(Mode.JSON).maxRetries(2));
+				.model("gpt-4o").responseModel(User.class).mode(Mode.JSON_OBJECT)
+				.maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 
@@ -58,7 +59,7 @@ public class UserExample {
 		response = service.createModel(
 				r -> r.addMessages(UserMessage.of("Jason is a 25 years old scientist"))
 						.model("gpt-3.5-turbo-0125").responseModel(User.class)
-						.mode(Mode.JSON).maxRetries(2));
+						.mode(Mode.JSON_OBJECT).maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 	}

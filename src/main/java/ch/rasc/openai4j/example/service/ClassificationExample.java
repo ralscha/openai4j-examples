@@ -1,5 +1,6 @@
 package ch.rasc.openai4j.example.service;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ch.rasc.openai4j.OpenAIClient;
@@ -14,7 +15,7 @@ public class ClassificationExample {
 		SPAM, NOT_SPAM
 	}
 
-	record Prediction(Label label) {
+	record Prediction(@JsonProperty(required = true) Label label) {
 	}
 
 	public static void main(String[] args) {
@@ -25,11 +26,17 @@ public class ClassificationExample {
 
 		var response = service.<Prediction>createModel(r -> r.addMessages(UserMessage.of(
 				"Classify the following text: Hello there I'm a nigerian prince and I want to give you money"))
-				.model("gpt-4o").responseModel(Prediction.class).mode(Mode.JSON)
+				.model("gpt-4o-mini").responseModel(Prediction.class).mode(Mode.JSON_OBJECT)
 				.maxRetries(2));
 		System.out.println(response.responseModel());
 		System.out.println(response.response());
 
+		response = service.<Prediction>createModel(r -> r.addMessages(UserMessage.of(
+				"Classify the following text: Hello I'm from the bank and I need your password"))
+				.model("gpt-4o-mini").responseModel(Prediction.class).mode(Mode.JSON_SCHEMA)
+				.maxRetries(2));
+		System.out.println(response.responseModel());
+		System.out.println(response.response());
 	}
 
 }
