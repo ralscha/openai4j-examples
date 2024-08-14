@@ -18,12 +18,12 @@ public class ChatCompletionsExample {
 		var response = client.chatCompletions.create(r -> r
 				.addMessages(SystemMessage.of("You are a helpful assistant"),
 						UserMessage.of("What is the capital of Spain?"))
-				.logpropbs(true).model("gpt-4o"));
+				.logpropbs(true).model("gpt-4o-mini"));
 		System.out.println(response.choices().get(0).message().content());
 		System.out.println(response.choices().get(0).logprobs());
 
 		EncodingRegistry registry = Encodings.newDefaultEncodingRegistry();
-		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4);
+		Encoding enc = registry.getEncodingForModel(ModelType.GPT_4O_MINI);
 		IntArrayList encoded = enc.encode("What is the capital of Spain?");
 		System.out.println("Token length: " + encoded.size());
 

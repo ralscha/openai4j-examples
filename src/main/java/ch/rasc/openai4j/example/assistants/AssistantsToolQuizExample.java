@@ -2,6 +2,7 @@ package ch.rasc.openai4j.example.assistants;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,19 +10,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.victools.jsonschema.generator.OptionPreset;
-import com.github.victools.jsonschema.generator.SchemaGenerator;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfig;
-import com.github.victools.jsonschema.generator.SchemaGeneratorConfigBuilder;
-import com.github.victools.jsonschema.generator.SchemaVersion;
-import com.github.victools.jsonschema.module.jackson.JacksonModule;
-import com.github.victools.jsonschema.module.jackson.JacksonOption;
 
 import ch.rasc.openai4j.Configuration;
 import ch.rasc.openai4j.OpenAIClient;
 import ch.rasc.openai4j.assistants.CodeInterpreterTool;
 import ch.rasc.openai4j.assistants.FunctionTool;
 import ch.rasc.openai4j.common.FunctionParameters;
+import ch.rasc.openai4j.common.JsonSchemaService;
 import ch.rasc.openai4j.common.SortOrder;
 import ch.rasc.openai4j.example.Util;
 import ch.rasc.openai4j.threads.TextMessageContent;
@@ -40,20 +35,15 @@ public class AssistantsToolQuizExample {
 			client.assistants.delete(a.id());
 		}
 
-		JacksonModule module = new JacksonModule(
-				JacksonOption.RESPECT_JSONPROPERTY_REQUIRED);
-		SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(
-				SchemaVersion.DRAFT_2020_12, OptionPreset.PLAIN_JSON).with(module);
-		SchemaGeneratorConfig config = configBuilder.build();
-		var schemaGenerator = new SchemaGenerator(config);
-		var jsonSchema = schemaGenerator.generateSchema(DisplayQuiz.class);
+		JsonSchemaService jsonSchemaService = new JsonSchemaService();
+		var jsonSchema = jsonSchemaService.generateStrictSchema(DisplayQuiz.class);
 
 		var assistant = client.assistants.create(r -> r.name("Math Tutor")
 				.instructions("You are a personal math tutor")
 				.addTools(CodeInterpreterTool.of(), FunctionTool.of(FunctionParameters.of(
 						"display_quiz",
 						"Displays a quiz to the student, and returns the student's response. A single quiz can have multiple questions.",
-						jsonSchema)))
+						jsonSchema, true)))
 				.model("gpt-4o"));
 
 		String userMessage = "Make a quiz with 2 questions: One open ended, one multiple choice. Then, give me feedback for the responses.";
@@ -70,6 +60,7 @@ public class AssistantsToolQuizExample {
 			for (var toolCall : run.requiredAction().submitToolOutputs().toolCalls()) {
 				String arguments = toolCall.function().arguments();
 				ObjectMapper om = new ObjectMapper();
+				om.findAndRegisterModules();
 				DisplayQuiz dq = om.readValue(arguments, DisplayQuiz.class);
 				List<String> userResponse = displayQuiz(dq);
 				String userResponseString = om.writeValueAsString(userResponse);
@@ -119,15 +110,17 @@ public class AssistantsToolQuizExample {
 			String response = "";
 
 			// If multiple choice, print options
-			if (q.questionType() == QuestionType.MULTIPLE_CHOICE) {
-				for (int i = 0; i < q.choices().size(); i++) {
-					System.out.println(i + ". " + q.choices().get(i));
+			if (q.questionType() == QuestionType.MULTIPLE_CHOICE
+					&& q.choices().isPresent()) {
+				List<String> choices = q.choices().get();
+				for (int i = 0; i < choices.size(); i++) {
+					System.out.println(i + ". " + choices.get(i));
 				}
 				response = scanner.nextLine();
 				try {
 					int responseInt = Integer.parseInt(response);
-					if (responseInt >= 0 && responseInt < q.choices().size()) {
-						response = q.choices().get(responseInt);
+					if (responseInt >= 0 && responseInt < choices.size()) {
+						response = choices.get(responseInt);
 					}
 				}
 				catch (NumberFormatException e) {
@@ -154,6 +147,6 @@ public class AssistantsToolQuizExample {
 	// Question class as a record
 	private record Question(@JsonProperty(required = true) String questionText,
 			@JsonProperty(required = true) QuestionType questionType,
-			List<String> choices) {
+			@JsonProperty(required = true) Optional<List<String>> choices) {
 	}
 }
